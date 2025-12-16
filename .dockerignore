@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# Environment files
+.env
+.env.*
+
+# Kamal
+.kamal
+
+# Test files
+test/
+
+# IDE/Editor
+.ruby-lsp/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
