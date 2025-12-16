@@ -20,6 +20,8 @@ servers:
 proxy:
   ssl: true
   host: <%= ENV['APP_HOST'] %>
+  healthcheck:
+    path: /up
   # Proxy connects to your container on port 80 by default.
   # app_port: 3000
 

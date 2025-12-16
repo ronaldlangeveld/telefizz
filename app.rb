@@ -6,6 +6,12 @@ require_relative 'lib/use_cases/process_webhook_event'
 require_relative 'lib/interfaces/webhook_controller'
 require_relative 'lib/infrastructure/telegram_message_gateway'
 
+# Health check endpoint
+get '/up' do
+  status 200
+  'OK'
+end
+
 # Dependency injection
 message_gateway = Infrastructure::TelegramMessageGateway.new(bot_token: ENV['TELEGRAM_BOT_TOKEN'])
 process_webhook_event_use_case = UseCases::ProcessWebhookEvent.new(message_gateway: message_gateway)
