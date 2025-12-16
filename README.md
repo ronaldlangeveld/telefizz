@@ -103,11 +103,18 @@ Telefizz is production-ready with [Kamal](https://kamal-deploy.org/), a zero-dow
    cp .env.example .env
    # Edit .env with actual values
    ```
+   
+   > **💡 Tip:** We recommend using the [dotenv gem](https://github.com/bkeepers/dotenv) for to easily handle your credentials. Install it globally and use `dotenv kamal setup` instead of `kamal setup` to automatically load your `.env` file. Of course, you can also use a Password Manager as per Kamals Documentation.
 
 4. **Deploy:**
    ```bash
-   kamal setup     # First-time setup
-   kamal deploy    # Deploy your app
+   # With dotenv
+   dotenv kamal setup     # First-time setup
+   dotenv kamal deploy    # Deploy your app
+   
+   # Or without dotenv
+   kamal setup
+   kamal deploy
    ```
 
 ### Kamal Commands
@@ -239,9 +246,6 @@ Use this with Kamal's health checks, monitoring services, or load balancers to e
 - ✅ SSL/TLS encryption enabled by default
 
 ## Troubleshooting
-
-### Deployment fails with "Could not locate Gemfile"
-Ensure `Gemfile` (capitalized) exists in your project root.
 
 ### Webhook not receiving events
 1. Verify `FIZZY_WEBHOOK_SECRET` matches your Fizzy webhook configuration
