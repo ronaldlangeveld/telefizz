@@ -12,6 +12,11 @@ get '/up' do
   'OK'
 end
 
+# Landing page
+get '/' do
+  erb :index
+end
+
 # Dependency injection
 message_gateway = Infrastructure::TelegramMessageGateway.new(bot_token: ENV['TELEGRAM_BOT_TOKEN'])
 process_webhook_event_use_case = UseCases::ProcessWebhookEvent.new(message_gateway: message_gateway)
