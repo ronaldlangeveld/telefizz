@@ -57,7 +57,7 @@ Perfect for teams that want real-time Fizzy notifications without context-switch
 
 3. **Run the application:**
    ```bash
-   rackup
+   ruby app.rb
    ```
    
    The app will be available at `http://localhost:9292`
