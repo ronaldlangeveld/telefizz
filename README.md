@@ -8,7 +8,7 @@
 
 ## Overview
 
-Telefizz listens for webhook events from [Fizzy](https://fizzy.ai/) and instantly relays them to Telegram. Built with Clean Architecture for maintainability, it's designed to be self-hosted, scalable, and easy to understand.
+Telefizz listens for webhook events from [Fizzy](https://fizzy.do/) and instantly relays them to Telegram. Built with Clean Architecture for maintainability, it's designed to be self-hosted, scalable, and easy to understand.
 
 Perfect for teams that want real-time Fizzy notifications without context-switching.
 
