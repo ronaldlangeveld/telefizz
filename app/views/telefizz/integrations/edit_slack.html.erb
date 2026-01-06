@@ -1,0 +1,68 @@
+<div class="container mx-auto p-6 max-w-xl">
+  <div class="mb-8">
+    <%= link_to telefizz_integrations_path, class: "btn btn-ghost btn-sm gap-2" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Back to Integrations
+    <% end %>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="avatar placeholder">
+          <div class="bg-[#4A154B] text-white rounded-full w-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <h2 class="card-title text-2xl">Edit Slack Integration</h2>
+          <p class="text-base-content/60">Update your Slack webhook URL</p>
+        </div>
+      </div>
+
+      <%= form_with model: @integration, url: telefizz_update_slack_integration_path(@integration), scope: :slack_integration, method: :patch, class: "space-y-6" do |form| %>
+        <% if @integration.errors.any? %>
+          <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <% @integration.errors.full_messages.each do |message| %>
+                <p><%= message %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="form-control w-full">
+          <%= form.label :name, class: "label" do %>
+            <span class="label-text font-medium">Integration Name</span>
+          <% end %>
+          <%= form.text_field :name, class: "input input-bordered w-full", placeholder: "e.g., #alerts-channel", value: @integration.name %>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">A friendly name to identify this integration</span>
+          </label>
+        </div>
+
+        <div class="form-control w-full">
+          <%= form.label :webhook_url, class: "label" do %>
+            <span class="label-text font-medium">Webhook URL</span>
+          <% end %>
+          <%= form.text_field :webhook_url, class: "input input-bordered w-full font-mono text-sm", placeholder: "Paste your Slack webhook URL here", value: @integration.config&.dig("webhook_url") %>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">The incoming webhook URL from your Slack app</span>
+          </label>
+        </div>
+
+        <div class="card-actions justify-end pt-4">
+          <%= link_to "Cancel", telefizz_integrations_path, class: "btn btn-ghost" %>
+          <%= form.submit "Update Integration", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

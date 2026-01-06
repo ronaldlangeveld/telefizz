@@ -1,0 +1,56 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">My Fizzy Boards</h1>
+    <%= link_to telefizz_new_board_path, class: "btn btn-primary" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Add Fizzy Board
+    <% end %>
+  </div>
+
+  <% if @boards.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @boards.each do |board| %>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title"><%= board.name %></h2>
+            <p class="text-sm text-base-content/60 font-mono truncate"><%= board.uuid %></p>
+            <div class="flex flex-wrap gap-1 mt-2">
+              <% board.integrations.each do |integration| %>
+                <div class="badge badge-sm badge-outline">
+                  <%= integration.class.name.sub('Integration', '') %>
+                </div>
+              <% end %>
+              <% if board.integrations.empty? %>
+                <span class="text-xs text-base-content/40">No integrations</span>
+              <% end %>
+            </div>
+            <div class="card-actions justify-end mt-4">
+              <%= link_to telefizz_show_board_path(board), class: "btn btn-sm btn-outline" do %>View<% end %>
+              <%= link_to telefizz_setup_board_path(board), class: "btn btn-sm btn-ghost" do %>Setup<% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="card bg-base-200 shadow-lg">
+      <div class="card-body items-center text-center py-12">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-base-content/40 mb-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+        </svg>
+        <h2 class="card-title text-base-content/60">No boards yet</h2>
+        <p class="text-base-content/50">Link your first Fizzy Board to get started!</p>
+        <div class="card-actions mt-4">
+          <%= link_to telefizz_new_board_path, class: "btn btn-primary" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add your first board
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
