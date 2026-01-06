@@ -56,6 +56,16 @@
         <% end %>
 
         <div class="form-control w-full">
+          <%= form.label :name, class: "label" do %>
+            <span class="label-text font-medium">Integration Name</span>
+          <% end %>
+          <%= form.text_field :name, class: "input input-bordered w-full", placeholder: "e.g., #alerts-channel", value: @integration.name %>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">A friendly name to identify this integration</span>
+          </label>
+        </div>
+
+        <div class="form-control w-full">
           <%= form.label :webhook_url, class: "label" do %>
             <span class="label-text font-medium">Webhook URL</span>
           <% end %>

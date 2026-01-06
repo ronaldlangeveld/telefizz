@@ -1,7 +1,7 @@
 class Telefizz::IntegrationsController < Telefizz::BaseController
   def index
-    @telegram_integration = Current.user.integrations.find_by(type: "TelegramIntegration")
-    @slack_integration = Current.user.integrations.find_by(type: "SlackIntegration")
+    @telegram_integrations = Current.user.integrations.where(type: "TelegramIntegration")
+    @slack_integrations = Current.user.integrations.where(type: "SlackIntegration")
   end
 
   # Telegram actions
@@ -10,7 +10,11 @@ class Telefizz::IntegrationsController < Telefizz::BaseController
   end
 
   def create_telegram
-    @integration = TelegramIntegration.new(user: Current.user, config: telegram_config)
+    @integration = TelegramIntegration.new(
+      user: Current.user,
+      name: telegram_params[:name],
+      config: telegram_config
+    )
 
     if @integration.save
       redirect_to telefizz_integrations_path, notice: "Telegram integration created successfully."
@@ -25,6 +29,7 @@ class Telefizz::IntegrationsController < Telefizz::BaseController
 
   def update_telegram
     @integration = Current.user.integrations.find(params[:id])
+    @integration.name = telegram_params[:name]
     @integration.config = telegram_config
 
     if @integration.save
@@ -46,7 +51,11 @@ class Telefizz::IntegrationsController < Telefizz::BaseController
   end
 
   def create_slack
-    @integration = SlackIntegration.new(user: Current.user, config: slack_config)
+    @integration = SlackIntegration.new(
+      user: Current.user,
+      name: slack_params[:name],
+      config: slack_config
+    )
 
     if @integration.save
       redirect_to telefizz_integrations_path, notice: "Slack integration created successfully."
@@ -61,6 +70,7 @@ class Telefizz::IntegrationsController < Telefizz::BaseController
 
   def update_slack
     @integration = Current.user.integrations.find(params[:id])
+    @integration.name = slack_params[:name]
     @integration.config = slack_config
 
     if @integration.save
@@ -79,7 +89,7 @@ class Telefizz::IntegrationsController < Telefizz::BaseController
   private
 
   def telegram_params
-    params.require(:telegram_integration).permit(:bot_token, :chat_id)
+    params.require(:telegram_integration).permit(:name, :bot_token, :chat_id)
   end
 
   def telegram_config
@@ -90,7 +100,7 @@ class Telefizz::IntegrationsController < Telefizz::BaseController
   end
 
   def slack_params
-    params.require(:slack_integration).permit(:webhook_url)
+    params.require(:slack_integration).permit(:name, :webhook_url)
   end
 
   def slack_config

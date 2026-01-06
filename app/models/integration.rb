@@ -3,6 +3,8 @@ class Integration < ApplicationRecord
   has_many :board_integrations, dependent: :destroy
   has_many :boards, through: :board_integrations
 
+  validates :name, presence: true
+
   # STI subclasses should define their own validations and accessors
   # Each subclass must implement:
   #   - send_message(text) -> boolean
