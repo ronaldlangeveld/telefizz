@@ -84,8 +84,8 @@
                     </div>
                   </div>
                   <div>
-                    <p class="font-medium">Telegram</p>
-                    <p class="text-xs text-base-content/60">Chat ID: <%= integration.config["chat_id"] %></p>
+                    <p class="font-medium"><%= integration.name %></p>
+                    <p class="text-xs text-base-content/60">Telegram · Chat ID: <%= integration.config["chat_id"] %></p>
                   </div>
                 <% elsif integration.is_a?(SlackIntegration) %>
                   <div class="avatar placeholder">
@@ -96,8 +96,8 @@
                     </div>
                   </div>
                   <div>
-                    <p class="font-medium">Slack</p>
-                    <p class="text-xs text-base-content/60">Webhook configured</p>
+                    <p class="font-medium"><%= integration.name %></p>
+                    <p class="text-xs text-base-content/60">Slack · Webhook configured</p>
                   </div>
                 <% end %>
               </div>
