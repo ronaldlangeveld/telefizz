@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   # Magic link authentication
   get "magic_link/:token", to: "magic_links#show", as: :magic_link
 
+  # Webhooks
+  post "webhooks/:uuid", to: "webhooks#create", as: :webhook
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

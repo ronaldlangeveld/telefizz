@@ -70,7 +70,7 @@ namespace :users do
   def print_magic_link(user)
     include Rails.application.routes.url_helpers
     default_url_options[:host] = ENV.fetch("HOST", "localhost:3000")
-    url = magic_link_url(token: user.login_token)
+    url = telefizz_magic_link_url(token: user.login_token)
     puts "\n🔗 Magic link (expires in 15 minutes):"
     puts url
   end
