@@ -5,8 +5,11 @@ Rails.application.routes.draw do
     get "/board", to: "board#index", as: :board
     get "/board/new", to: "board#new", as: :new_board
     post "/board", to: "board#create", as: :create_board
+    get "/board/:id", to: "board#show", as: :show_board
     get "/board/:id/setup", to: "board#setup", as: :setup_board
     patch "/board/:id/setup", to: "board#save_secret", as: :save_secret_board
+    post "/board/:id/integrations/:integration_id", to: "board#add_integration", as: :add_board_integration
+    delete "/board/:id/integrations/:integration_id", to: "board#remove_integration", as: :remove_board_integration
 
     # Integrations
     get "/integrations", to: "integrations#index", as: :integrations

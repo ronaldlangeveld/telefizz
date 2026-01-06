@@ -15,10 +15,20 @@
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title"><%= board.name %></h2>
-            <p class="text-sm text-base-content/60">UUID: <%= board.uuid %></p>
+            <p class="text-sm text-base-content/60 font-mono truncate"><%= board.uuid %></p>
+            <div class="flex flex-wrap gap-1 mt-2">
+              <% board.integrations.each do |integration| %>
+                <div class="badge badge-sm badge-outline">
+                  <%= integration.class.name.sub('Integration', '') %>
+                </div>
+              <% end %>
+              <% if board.integrations.empty? %>
+                <span class="text-xs text-base-content/40">No integrations</span>
+              <% end %>
+            </div>
             <div class="card-actions justify-end mt-4">
-              <button class="btn btn-sm btn-outline">View</button>
-              <button class="btn btn-sm btn-ghost">Edit</button>
+              <%= link_to telefizz_show_board_path(board), class: "btn btn-sm btn-outline" do %>View<% end %>
+              <%= link_to telefizz_setup_board_path(board), class: "btn btn-sm btn-ghost" do %>Setup<% end %>
             </div>
           </div>
         </div>

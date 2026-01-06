@@ -3,6 +3,11 @@ class Telefizz::BoardController < Telefizz::BaseController
     @boards = Current.user.boards
   end
 
+  def show
+    @board = Current.user.boards.find(params[:id])
+    @available_integrations = Current.user.integrations
+  end
+
   def new
     @board = Current.user.boards.new
   end
@@ -23,10 +28,30 @@ class Telefizz::BoardController < Telefizz::BaseController
   def save_secret
     @board = Current.user.boards.find(params[:id])
     if @board.update(secret_params)
-      redirect_to telefizz_board_path, notice: "Board setup complete!"
+      redirect_to telefizz_show_board_path(@board), notice: "Board setup complete!"
     else
       render :setup, status: :unprocessable_entity
     end
+  end
+
+  def add_integration
+    @board = Current.user.boards.find(params[:id])
+    integration = Current.user.integrations.find(params[:integration_id])
+
+    unless @board.integrations.include?(integration)
+      @board.integrations << integration
+    end
+
+    redirect_to telefizz_show_board_path(@board), notice: "#{integration.class.name.underscore.humanize} connected!"
+  end
+
+  def remove_integration
+    @board = Current.user.boards.find(params[:id])
+    integration = Current.user.integrations.find(params[:integration_id])
+
+    @board.integrations.delete(integration)
+
+    redirect_to telefizz_show_board_path(@board), notice: "#{integration.class.name.underscore.humanize} disconnected."
   end
 
   private

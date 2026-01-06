@@ -5,6 +5,7 @@ class WebhooksController < ApplicationController
   def create
     board = Board.find_by(uuid: params[:uuid])
     if board.nil?
+      Rails.logger.warn("Webhook received for unknown board UUID: #{params[:uuid]}")
       head :not_found
       return
     end
@@ -15,9 +16,15 @@ class WebhooksController < ApplicationController
       return
     end
 
+    # Fizzy sends action in the nested webhook object or as a separate field
+    action = event_data["action"] || event_data.dig("webhook", "action")
+
+    Rails.logger.info("Webhook received for board #{board.name}: action=#{action}")
+    Rails.logger.info("Board has #{board.integrations.count} integrations connected")
+
     event = Entities::Event.new(
       id: event_data["id"],
-      action: event_data["action"],
+      action: action,
       created_at: event_data["created_at"],
       eventable: event_data["eventable"],
       board: event_data["board"],
@@ -28,7 +35,8 @@ class WebhooksController < ApplicationController
     board.webhook_events.create!(action: event.action)
 
     # Process and send to all connected integrations
-    ProcessWebhookEvent.new(board: board).execute(event)
+    results = ProcessWebhookEvent.new(board: board).execute(event)
+    Rails.logger.info("Webhook processing results: #{results.inspect}")
 
     head :ok
   end
