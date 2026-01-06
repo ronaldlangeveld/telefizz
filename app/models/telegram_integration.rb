@@ -10,18 +10,25 @@ class TelegramIntegration < Integration
       body: {
         chat_id: config["chat_id"],
         text: text,
-        parse_mode: "HTML"  # Keeps your formatting (bold, links, etc.)
+        parse_mode: "HTML"
       }.to_json,
       headers: { "Content-Type" => "application/json" },
-      timeout: 10  # Safety
+      timeout: 10
     )
 
     if response.success?
       true
     else
       Rails.logger.error("Telegram send failed: #{response.code} - #{response.body}")
-      false  # Or raise if you want hard fails
+      false
     end
+  end
+
+  # Telegram supports HTML formatting
+  def format_message(text)
+    text
+      .gsub(/\*\*(.+?)\*\*/, '<b>\1</b>')  # **bold** -> <b>bold</b>
+      .gsub(/\*(.+?)\*/, '<i>\1</i>')       # *italic* -> <i>italic</i>
   end
 
   private

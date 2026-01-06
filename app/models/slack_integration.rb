@@ -6,10 +6,7 @@ class SlackIntegration < Integration
   def send_message(text)
     response = HTTParty.post(
       config["webhook_url"],
-      body: {
-        text: text,
-        mrkdwn: true
-      }.to_json,
+      body: { text: text }.to_json,
       headers: { "Content-Type" => "application/json" },
       timeout: 10
     )
@@ -20,6 +17,12 @@ class SlackIntegration < Integration
       Rails.logger.error("Slack send failed: #{response.code} - #{response.body}")
       false
     end
+  end
+
+  # Slack uses mrkdwn format
+  def format_message(text)
+    text
+      .gsub(/\*\*(.+?)\*\*/, '*\1*')  # **bold** -> *bold* (Slack bold)
   end
 
   private

@@ -1,5 +1,6 @@
 class WebhooksController < ApplicationController
   allow_unauthenticated_access
+  skip_forgery_protection
 
   def create
     board = Board.find_by(uuid: params[:uuid])
@@ -8,7 +9,7 @@ class WebhooksController < ApplicationController
       return
     end
 
-    event_data = JSON.parse(request_body) rescue nil
+    event_data = JSON.parse(request.body.read) rescue nil
     if event_data.nil?
       head :bad_request
       return
@@ -23,13 +24,12 @@ class WebhooksController < ApplicationController
       creator: event_data["creator"]
     )
 
-    # TODO Implement processing logic via ProcessWebhookEvent service
+    # Record the webhook event
+    board.webhook_events.create!(action: event.action)
 
-    # Process the webhook payload here
-    # For example, you might want to log the payload or trigger some action
+    # Process and send to all connected integrations
+    ProcessWebhookEvent.new(board: board).execute(event)
 
     head :ok
   end
-
-  private
 end

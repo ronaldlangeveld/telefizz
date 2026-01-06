@@ -1,6 +1,8 @@
 class Board < ApplicationRecord
   belongs_to :user
   has_many :webhook_events, dependent: :destroy
+  has_many :board_integrations, dependent: :destroy
+  has_many :integrations, through: :board_integrations
 
   before_create :set_defaults
   before_create :set_uuid
