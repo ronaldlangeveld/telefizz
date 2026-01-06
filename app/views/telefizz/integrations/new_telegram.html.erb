@@ -1,0 +1,84 @@
+<div class="container mx-auto p-6 max-w-xl">
+  <div class="mb-8">
+    <%= link_to telefizz_integrations_path, class: "btn btn-ghost btn-sm gap-2" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Back to Integrations
+    <% end %>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="avatar placeholder">
+          <div class="bg-blue-500 text-white rounded-full w-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <h2 class="card-title text-2xl">Connect Telegram</h2>
+          <p class="text-base-content/60">Send board notifications to a Telegram chat</p>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="alert mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 class="font-bold">How to get your Telegram credentials:</h3>
+          <ol class="list-decimal list-inside text-sm mt-2 space-y-1">
+            <li>Message <a href="https://t.me/BotFather" target="_blank" class="link link-primary">@BotFather</a> on Telegram</li>
+            <li>Create a new bot with <code>/newbot</code> command</li>
+            <li>Copy the Bot API Token you receive</li>
+            <li>Add your bot to a chat/group and get the Chat ID</li>
+          </ol>
+        </div>
+      </div>
+
+      <%= form_with model: @integration, url: telefizz_create_telegram_integration_path, scope: :telegram_integration, class: "space-y-6" do |form| %>
+        <% if @integration.errors.any? %>
+          <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <% @integration.errors.full_messages.each do |message| %>
+                <p><%= message %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="form-control w-full">
+          <%= form.label :bot_token, class: "label" do %>
+            <span class="label-text font-medium">Bot API Token</span>
+          <% end %>
+          <%= form.text_field :bot_token, class: "input input-bordered w-full font-mono", placeholder: "123456789:ABCdefGHIjklMNOpqrsTUVwxyz", value: @integration.config&.dig("bot_token") %>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">The token you received from @BotFather</span>
+          </label>
+        </div>
+
+        <div class="form-control w-full">
+          <%= form.label :chat_id, class: "label" do %>
+            <span class="label-text font-medium">Chat ID</span>
+          <% end %>
+          <%= form.text_field :chat_id, class: "input input-bordered w-full font-mono", placeholder: "-1001234567890", value: @integration.config&.dig("chat_id") %>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">The ID of the chat/group to send notifications to</span>
+          </label>
+        </div>
+
+        <div class="card-actions justify-end pt-4">
+          <%= link_to "Cancel", telefizz_integrations_path, class: "btn btn-ghost" %>
+          <%= form.submit "Connect Telegram", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

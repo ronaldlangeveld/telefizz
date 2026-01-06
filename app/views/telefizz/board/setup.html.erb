@@ -1,0 +1,104 @@
+<div class="container mx-auto p-6 max-w-2xl">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="badge badge-primary badge-lg">Step 2 of 2</div>
+      </div>
+      <h2 class="card-title text-2xl">Connect <%= @board.name %> to Fizzy</h2>
+      <p class="text-base-content/60 mb-6">Copy the webhook URL below and add it to your Fizzy board settings. Then paste the secret Fizzy provides.</p>
+
+      <div class="space-y-6">
+        <!-- Webhook URL Section -->
+        <div class="bg-base-200 rounded-lg p-4">
+          <label class="label">
+            <span class="label-text font-medium flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+              </svg>
+              Your Webhook URL
+            </span>
+          </label>
+          <div class="join w-full">
+            <input type="text" value="<%= @board.webhook_url %>" class="input input-bordered join-item w-full font-mono text-sm" readonly id="webhook-url" />
+            <button type="button" class="btn btn-primary join-item" onclick="copyWebhookUrl()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">Add this URL to your Fizzy board's webhook settings</span>
+          </label>
+        </div>
+
+        <!-- Instructions -->
+        <div class="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div>
+            <h3 class="font-bold">How to add the webhook in Fizzy:</h3>
+            <ol class="list-decimal list-inside text-sm mt-2 space-y-1">
+              <li>Go to your Fizzy board settings</li>
+              <li>Navigate to the Webhooks section</li>
+              <li>Paste the URL above and save</li>
+              <li>Copy the secret Fizzy generates and paste it below</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Secret Input Form -->
+        <%= form_with model: @board, url: telefizz_save_secret_board_path(@board), method: :patch, class: "space-y-4" do |form| %>
+          <% if @board.errors.any? %>
+            <div class="alert alert-error">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <% @board.errors.full_messages.each do |message| %>
+                  <p><%= message %></p>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="form-control w-full">
+            <%= form.label :secret, class: "label" do %>
+              <span class="label-text font-medium flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+                Webhook Secret
+              </span>
+            <% end %>
+            <%= form.text_field :secret, class: "input input-bordered w-full font-mono", placeholder: "Paste the secret from Fizzy here", value: @board.secret %>
+            <label class="label">
+              <span class="label-text-alt text-base-content/50">This secret is used to verify webhook requests from Fizzy</span>
+            </label>
+          </div>
+
+          <div class="card-actions justify-between pt-4">
+            <%= link_to "Skip for now", telefizz_board_path, class: "btn btn-ghost" %>
+            <%= form.submit "Complete Setup", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function copyWebhookUrl() {
+    const urlInput = document.getElementById('webhook-url');
+    urlInput.select();
+    navigator.clipboard.writeText(urlInput.value);
+    
+    // Show toast notification
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-top toast-end';
+    toast.innerHTML = '<div class="alert alert-success"><span>Webhook URL copied!</span></div>';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+  }
+</script>

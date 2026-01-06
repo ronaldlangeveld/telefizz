@@ -1,0 +1,50 @@
+<div class="container mx-auto p-6 max-w-xl">
+  <div class="mb-8">
+    <%= link_to telefizz_board_path, class: "btn btn-ghost btn-sm gap-2" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Back to Boards
+    <% end %>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="badge badge-primary badge-lg">Step 1 of 2</div>
+      </div>
+      <h2 class="card-title text-2xl">Add a Fizzy Board</h2>
+      <p class="text-base-content/60 mb-6">Enter a name for your board. After creating it, you'll get a webhook URL to add to Fizzy.</p>
+
+      <%= form_with model: @board, url: telefizz_create_board_path, class: "space-y-6" do |form| %>
+        <% if @board.errors.any? %>
+          <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <% @board.errors.full_messages.each do |message| %>
+                <p><%= message %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="form-control w-full">
+          <%= form.label :name, class: "label" do %>
+            <span class="label-text font-medium">Board Name</span>
+          <% end %>
+          <%= form.text_field :name, class: "input input-bordered w-full", placeholder: "e.g., My Project Board", autofocus: true %>
+          <label class="label">
+            <span class="label-text-alt text-base-content/50">Give your board a descriptive name</span>
+          </label>
+        </div>
+
+        <div class="card-actions justify-end pt-4">
+          <%= link_to "Cancel", telefizz_board_path, class: "btn btn-ghost" %>
+          <%= form.submit "Create Board", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

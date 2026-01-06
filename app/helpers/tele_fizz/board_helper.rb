@@ -1,0 +1,2 @@
+module Telefizz::BoardHelper
+end

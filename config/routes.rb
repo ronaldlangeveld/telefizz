@@ -1,4 +1,37 @@
 Rails.application.routes.draw do
+  namespace :telefizz do
+    get "/", to: "home#index", as: :dashboard
+
+    get "/board", to: "board#index", as: :board
+    get "/board/new", to: "board#new", as: :new_board
+    post "/board", to: "board#create", as: :create_board
+    get "/board/:id/setup", to: "board#setup", as: :setup_board
+    patch "/board/:id/setup", to: "board#save_secret", as: :save_secret_board
+
+    # Integrations
+    get "/integrations", to: "integrations#index", as: :integrations
+    get "/integrations/telegram/new", to: "integrations#new_telegram", as: :new_telegram_integration
+    post "/integrations/telegram", to: "integrations#create_telegram", as: :create_telegram_integration
+    get "/integrations/telegram/:id/edit", to: "integrations#edit_telegram", as: :edit_telegram_integration
+    patch "/integrations/telegram/:id", to: "integrations#update_telegram", as: :update_telegram_integration
+    delete "/integrations/telegram/:id", to: "integrations#destroy_telegram", as: :destroy_telegram_integration
+
+    # Slack Integration
+    get "/integrations/slack/new", to: "integrations#new_slack", as: :new_slack_integration
+    post "/integrations/slack", to: "integrations#create_slack", as: :create_slack_integration
+    get "/integrations/slack/:id/edit", to: "integrations#edit_slack", as: :edit_slack_integration
+    patch "/integrations/slack/:id", to: "integrations#update_slack", as: :update_slack_integration
+    delete "/integrations/slack/:id", to: "integrations#destroy_slack", as: :destroy_slack_integration
+  end
+  namespace :public do
+    get "home/index"
+  end
+  resource :session
+  # resources :passwords, param: :token
+
+  # Magic link authentication
+  get "magic_link/:token", to: "magic_links#show", as: :magic_link
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -11,4 +44,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  root "public/home#index"
 end
