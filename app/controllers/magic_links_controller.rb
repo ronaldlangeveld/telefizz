@@ -1,4 +1,4 @@
-class Telefizz::MagicLinksController < Telefizz::BaseController
+class MagicLinksController < ApplicationController
   allow_unauthenticated_access only: %i[show]
   rate_limit to: 10, within: 3.minutes, only: :show, with: -> { redirect_to new_session_path, alert: "Too many attempts. Try again later." }
 
