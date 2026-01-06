@@ -1,18 +1,15 @@
-ENV['RACK_ENV'] = 'test'
-ENV['TELEGRAM_BOT_TOKEN'] = 'test_bot_token'
-ENV['TELEGRAM_CHAT_ID'] = '123456789'
-ENV['FIZZY_WEBHOOK_SECRET'] = 'test_secret'
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
+require "rails/test_help"
 
-require 'minitest/autorun'
-require 'rack/test'
-require 'webmock/minitest'
-require 'json'
+module ActiveSupport
+  class TestCase
+    # Run tests in parallel with specified workers
+    parallelize(workers: :number_of_processors)
 
-# Load application
-require_relative '../lib/entities/event'
-require_relative '../lib/entities/message'
-require_relative '../lib/use_cases/process_webhook_event'
-require_relative '../lib/interfaces/webhook_controller'
-require_relative '../lib/infrastructure/telegram_message_gateway'
+    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+    fixtures :all
 
-WebMock.disable_net_connect!
+    # Add more helper methods to be used by all tests here...
+  end
+end
